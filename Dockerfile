@@ -7,6 +7,9 @@ RUN mkdir -p /tmp/download && \
  mv /tmp/download/docker/docker* /usr/local/bin/ && \
  rm -rf /tmp/download && \
  groupadd -g 999 docker && \
- usermod -aG staff,docker jenkins
+ usermod -aG staff,docker jenkins && \
+ wget --output-document=/usr/local/bin/docker-compose "https://github.com/docker/compose/releases/download/$(wget --quiet --output-document=- https://api.github.com/repos/docker/compose/releases/latest | grep --perl-regexp --only-matching '"tag_name": "\K.*?(?=")')/run.sh" && \
+chmod +x /usr/local/bin/docker-compose && \
+wget --output-document=/etc/bash_completion.d/docker-compose "https://raw.githubusercontent.com/docker/compose/$(docker-compose version --short)/contrib/completion/bash/docker-compose"
 
 USER jenkins
